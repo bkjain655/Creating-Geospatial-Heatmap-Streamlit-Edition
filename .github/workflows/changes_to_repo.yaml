@@ -1,0 +1,33 @@
+name: Generate Changes JSON
+on:
+  push:
+    branches:
+      - feature-Creating-Geospatial-Heatmap-Streamlit-Edition
+jobs:
+  generate-changes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: Get last commit hashes
+        id: last_commit
+        run: |
+          hash1=$(git log -n 1 --pretty=format:'%H')
+          hash2=$(git log -n 1 --skip=1 --pretty=format:'%H')
+          echo "HASH1: $hash1"
+          echo "HASH2: $hash2"
+          echo "hash1=$hash1" >> $GITHUB_ENV
+          echo "hash2=$hash2" >> $GITHUB_ENV
+      - name: Generate diff and write to JSON
+        run: |
+          echo "Diff between $hash2 and $hash1"
+          changes=$(git diff $hash2 $hash1 --name-status | grep '^[AMCDTR]' )
+          echo "Changes:"
+          echo "${changes}" > changes.json
+      - name: Upload JSON
+        uses: actions/upload-artifact@v2
+        with:
+          name: changes
+          path: changes.json
