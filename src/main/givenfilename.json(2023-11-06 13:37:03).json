@@ -1,0 +1,17 @@
+import streamlit as st
+import geopandas as gpd
+import folium
+
+# Load data
+reservations_data = pd.read_csv('reservations.csv')
+personnel_data = pd.read_csv('personnel.csv')
+
+# Perform necessary data processing and aggregation
+
+# Create geospatial visualization
+
+# Display the app
+st.title('Online Reservations Heatmap')
+
+# Display the map
+st.map(geospatial_data)
